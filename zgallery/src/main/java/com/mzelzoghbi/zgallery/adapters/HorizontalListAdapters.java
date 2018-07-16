@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.mzelzoghbi.zgallery.HorizontalImageViewHolder;
 import com.mzelzoghbi.zgallery.OnImgClick;
 import com.mzelzoghbi.zgallery.R;
+import com.mzelzoghbi.zgallery.glide.GlideApp;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public class HorizontalListAdapters extends RecyclerView.Adapter<HorizontalImage
 
     @Override
     public void onBindViewHolder(HorizontalImageViewHolder holder, final int position) {
-        Glide.with(activity).load(images.get(position)).into(holder.image);
+        GlideApp.with(activity).load(images.get(position)).into(holder.image);
         ColorMatrix matrix = new ColorMatrix();
         if (selectedItem != position) {
             matrix.setSaturation(0);

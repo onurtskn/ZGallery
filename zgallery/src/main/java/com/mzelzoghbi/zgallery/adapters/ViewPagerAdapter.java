@@ -2,6 +2,8 @@ package com.mzelzoghbi.zgallery.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,14 +16,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.github.chrisbanes.photoview.OnPhotoTapListener;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.mzelzoghbi.zgallery.R;
+import com.mzelzoghbi.zgallery.glide.GlideApp;
 
 import java.util.ArrayList;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by mohamedzakaria on 8/11/16.
@@ -59,19 +63,20 @@ public class ViewPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.z_pager_item, container, false);
 
         final ImageView imageView = (ImageView) itemView.findViewById(R.id.iv);
-        Glide.with(activity).load(images.get(position)).listener(new RequestListener<String, GlideDrawable>() {
+
+        GlideApp.with(activity).load(images.get(position)).listener(new RequestListener<Drawable>() {
             @Override
-            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 return false;
             }
 
             @Override
-            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                 mPhotoViewAttacher = new PhotoViewAttacher(imageView);
 
-                mPhotoViewAttacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+                mPhotoViewAttacher.setOnPhotoTapListener(new OnPhotoTapListener() {
                     @Override
-                    public void onPhotoTap(View view, float x, float y) {
+                    public void onPhotoTap(ImageView view, float x, float y) {
                         if (isShowing) {
                             isShowing = false;
                             toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
@@ -81,11 +86,6 @@ public class ViewPagerAdapter extends PagerAdapter {
                             toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
                             imagesHorizontalList.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
                         }
-                    }
-
-                    @Override
-                    public void onOutsidePhotoTap() {
-
                     }
                 });
 

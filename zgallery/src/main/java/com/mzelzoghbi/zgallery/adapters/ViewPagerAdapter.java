@@ -23,7 +23,6 @@ import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.mzelzoghbi.zgallery.R;
-import com.mzelzoghbi.zgallery.glide.GlideApp;
 
 import java.util.ArrayList;
 
@@ -55,16 +54,16 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == ((RelativeLayout) object);
+        return view == object;
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.z_pager_item, container, false);
 
-        final ImageView imageView = (ImageView) itemView.findViewById(R.id.iv);
+        final ImageView imageView = itemView.findViewById(R.id.iv);
 
-        GlideApp.with(activity).load(images.get(position)).listener(new RequestListener<Drawable>() {
+        Glide.with(activity).load(images.get(position)).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 return false;
